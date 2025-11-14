@@ -1,45 +1,38 @@
-
- 
-  function onOpen(){
+function onOpen(){
     let ui=SpreadsheetApp.getUi()
     ui.createMenu("Send Emails")
     .addItem("Send the emails","myFunction")
     .addToUi();
-     
+
 
   }
 
 function myFunction() {
-  let workbook=SpreadsheetApp.getActiveSheet()
+   let workbook=SpreadsheetApp.getActiveSheet()
   let c=workbook.getActiveRange().getValues();
-  let business_names=workbook.getRange("B:B").getValues();
-  let contact_names=workbook.getRange("C:C").getValues();
-  let sponsor=workbook.getRange("D:D").getValues();
-  
+  let business_names=workbook.getRange("B2:B").getValues();
+  let contact_names=workbook.getRange("C2:C").getValues();
+  let sponsor=workbook.getRange("D2:D").getValues();
+  let yes_message=
+"We are pleased that you have accepted our sponsorship proposal on behalf of CVS Pharmacy. As a result of your generous contribution, CVS Pharmacy will be entitled to the benefits of our Gold sponsorship tier. Please view our sponsorship packet online for additional details."
+
+
   for (let i=0;i<c.length;i++){
-    let yes_message="Hello "+contact_names[i]+" \nWe are pleased that you have accepted our sponsorship proposal on behalf of "+business_names[i]+". We would like to emphasize the impact that your contribution would have within the local community as a sponsor of our team. However, we respect your decision.\nThanks again for considering the offer!\nRegards,Team 2554"
-    let no_message="Hello "+{contact_names[i]+"\n We regret to hear that "+business_names[i]"has declined our offer for sponsorship. We would like to emphasize the impact that your contribution would have within the local community as a sponsor of our team. However, we respect your decision. Thanks again for considering the offer!\n Team 2554"
- 
-       
-      
-
-
         if (sponsor[i].toString().toLowerCase()==="no"){
         GmailApp.sendEmail(
         c[i].toString(),
-        "Sponsorship offer",
-         no_message
+        "Sponsorship",
+        "Hello, "+contact_names[i]+" \nWe regret to hear that " +business_names[i]+" has declined our offer for sponsorship, \nregardless,we would like to emphasize the impact that your contribution would have within the local community as a sponsor of our team. However, we respect your decision. \n Thank you, \n Team 2554"
          )
-        }else if(sponsor[i].toString().toLowerCase()==="yes"){
+        }
+         if (sponsor[i].toString().toLowerCase()==="yes"){
           GmailApp.sendEmail(
           c[i].toString(),
-          "Thank you for sponsorship",
-           yes_message
-
+          "Sponsorship",
+          "Hello, "+contact_names[i]+"\n We are pleased that you have accepted our sponsorship proposal on behalf of "+business_names[i]+". As a result of your generous contribution "+business_names[i]+ " \nwill be entitled to the benefits of our Gold sponsorship tier. Please view our sponsorship packet online for additional details.\n Thank You \n Team 2554"
 
 
           )
         }
-         
          }
   }
